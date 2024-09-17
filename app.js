@@ -44,7 +44,11 @@ function loadFloors(lifts,floors){
     const floorSpace = document.createElement('section')
     floorSpace.classList.add('floorSpace');
 
+    const reloadArea = createReloadArea()
+
     document.body.appendChild(floorSpace)
+    document.body.appendChild(reloadArea);
+    
     for(let i = 1 ; i <= floors ;i++){
 
         const floor = document.createElement("div");
@@ -115,6 +119,7 @@ async function callToLift(button){
 
     if(hasLiftBeenCalled[id-1][dir] === 1) return;
     hasLiftBeenCalled[id-1][dir] = 1;
+    button.style.backgroundColor = 'red';
 
     let liftID = findNearestLiftID(id,dir);
 
@@ -167,10 +172,7 @@ async function moveLift(liftID,button){
     //updating states
     liftsCordinates[liftID-1] = button.id;
     hasLiftBeenCalled[id-1][dir] = 0;
-}
-
-async function waitForLift(){
-    await new Promise(resolve => setTimeout(resolve,(100)));
+    button.style.backgroundColor = '#24a0ed';
 }
 
 function getTimeOfLift(liftID,button){
@@ -192,6 +194,30 @@ function findNearestLiftID(id,dir){
         }
     } 
     return nearestLiftID;
+}
+
+function createReloadArea(){
+    const reloadArea = document.createElement('section');
+    reloadArea.classList.add('reload');
+
+    const reloadBtn = document.createElement('button');
+    reloadBtn.classList.add('reloadBtn');
+    reloadBtn.innerHTML = 'Reload Lift Simulation'
+
+    reloadBtn.addEventListener('click' , (e)=>{
+        callReloadBtn(e);
+    })
+
+    reloadArea.appendChild(reloadBtn);
+
+    return reloadArea;
+}
+
+function callReloadBtn(e){
+    const userConfirmed = confirm("Are you Sure you want to Reload the Lift Simulation");
+    if(userConfirmed){
+        window.location.reload();
+    }
 }
 
 
